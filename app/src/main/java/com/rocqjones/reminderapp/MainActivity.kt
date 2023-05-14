@@ -23,6 +23,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.rocqjones.reminderapp.data.DataSource
+import com.rocqjones.reminderapp.models.ComposeRandomItem
+import com.rocqjones.reminderapp.ui.dialogs.ReminderDialog
 import com.rocqjones.reminderapp.ui.theme.ReminderAppTheme
 
 class MainActivity : ComponentActivity() {
@@ -45,33 +48,45 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun ListItems(
     modifier: Modifier = Modifier,
-    names: List<String> = List(30) { "$it" }
+    data: List<ComposeRandomItem> = DataSource.plants.map { it }  // names: List<String> = List(30) { "$it" }
 ) {
     /**
      * Let's create a performant lazy list.
      * Note that these are the equivalent component to RecyclerView or ListView from Views in Compose.
      */
     LazyColumn(modifier = modifier.padding(vertical = 4.dp)) {
-        items(items = names) { n ->
-            ComposeCard(name = n)
+        items(items = data.toMutableList()) { n ->
+            ComposeCard(
+                name = n.name,
+                type = n.type,
+                description = n.description
+            )
         }
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ComposeCard(name: String) {
+fun ComposeCard(name: String, type: String, description: String) {
+    val dialogState = remember { mutableStateOf(false) }
+
     Card(
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.primary
         ),
-        modifier = Modifier.padding(vertical = 4.dp, horizontal = 8.dp)
+        modifier = Modifier.padding(vertical = 4.dp, horizontal = 8.dp),
+        onClick = { dialogState.value = true }
     ) {
-        CardContent(name)
+        CardContent(name, type, description)
+    }
+
+    if (dialogState.value) {
+        ReminderDialog(name = name, onDismiss = { dialogState.value = false })
     }
 }
 
 @Composable
-fun CardContent(name: String) {
+fun CardContent(name: String, type: String, description: String) {
     /**
      * @remember is a composable function that can be used to cache expensive operations.
      *  Since we want to change state and also update the UI, we can use a MutableState.
@@ -97,7 +112,7 @@ fun CardContent(name: String) {
         Column(
             modifier = Modifier.weight(1f).padding(12.dp)
         ) {
-            Text(text = "Hello")
+            Text(text = type)
             Text(text = "$name.",
                 style = MaterialTheme.typography.headlineMedium.copy(
                     fontWeight = FontWeight.ExtraBold
@@ -107,7 +122,7 @@ fun CardContent(name: String) {
             if (expanded.value) {
                 // Some random text here.
                 Text(
-                    text = ("Jetpack Compose is a modern UI toolkit designed to simplify UI development.").repeat(2)
+                    text = (description)
                 )
             }
         }
