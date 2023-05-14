@@ -2,4 +2,11 @@
     <string name="app_name">Reminder App</string>
     <string name="show_less">Show less</string>
     <string name="show_more">Show more</string>
+    <string name="title_reminder">Remind me in…</string>
+    <string name="channel_name">reminder_channel</string>
+    <string name="channel_description">reminder_reminder</string>
+    <string name="schedule_5_seconds">5 seconds</string>
+    <string name="schedule_8_minutes">8 minutes</string>
+    <string name="schedule_1_day">1 day</string>
+    <string name="schedule_1_week">1 week</string>
 </resources>
