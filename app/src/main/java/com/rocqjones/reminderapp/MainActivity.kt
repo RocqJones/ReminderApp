@@ -7,6 +7,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -18,6 +19,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -54,28 +56,29 @@ fun ListItems(
      * Let's create a performant lazy list.
      * Note that these are the equivalent component to RecyclerView or ListView from Views in Compose.
      */
-    LazyColumn(modifier = modifier.padding(vertical = 4.dp)) {
+    LazyColumn(modifier = modifier.padding(vertical = 4.dp).testTag("list_items")) {
         items(items = data.toMutableList()) { n ->
             ComposeCard(
                 name = n.name,
                 type = n.type,
-                description = n.description
+                description = n.description,
+                modifier = Modifier.testTag("composeCard")
             )
         }
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ComposeCard(name: String, type: String, description: String) {
+fun ComposeCard(name: String, type: String, description: String, modifier: Modifier) {
     val dialogState = remember { mutableStateOf(false) }
 
     Card(
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.primary
         ),
-        modifier = Modifier.padding(vertical = 4.dp, horizontal = 8.dp),
-        onClick = { dialogState.value = true }
+        modifier = modifier.padding(vertical = 4.dp, horizontal = 8.dp).clickable {
+            dialogState.value = true
+        }
     ) {
         CardContent(name, type, description)
     }
