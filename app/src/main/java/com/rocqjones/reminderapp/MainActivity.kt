@@ -13,7 +13,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -57,12 +57,12 @@ fun ListItems(
      * Note that these are the equivalent component to RecyclerView or ListView from Views in Compose.
      */
     LazyColumn(modifier = modifier.padding(vertical = 4.dp).testTag("list_items")) {
-        items(items = data.toMutableList()) { n ->
+        itemsIndexed(items = data.toMutableList()) { index, n ->
             ComposeCard(
                 name = n.name,
                 type = n.type,
                 description = n.description,
-                modifier = Modifier.testTag("composeCard")
+                modifier = Modifier.testTag("composeCard_$index")
             )
         }
     }

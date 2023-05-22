@@ -5,6 +5,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.test.espresso.Espresso.onView
@@ -41,14 +42,31 @@ class MainActivityTest {
 
     @Test
     fun testComposableCard() {
-        composeTestRule.onNodeWithTag("composeCard")
+        composeTestRule.onNodeWithTag("composeCard_0")
     }
 
     @Test
-    fun testComposableCardClick() {
-        composeTestRule.onNodeWithTag("list_items")
-            .onChildren()
-            .assertAny(hasTestTag("composeCard"))[0].assertHasClickAction().performClick()
+    fun testOpenReminderDialog() {
+        composeTestRule.onNodeWithTag("composeCard_0").performClick()
+
+        // Simulate a click on the first ComposeCard
+        //composeTestRule.onNodeWithTag("composeCard").performClick()
+
+        // Verify that the ReminderDialog is displayed
+        //composeTestRule.onNodeWithText("Remind me in…").assertExists()
+        onView(withText(R.string.title_reminder))
+            .check(matches(isDisplayed()))
+
+        // Click on the "5 seconds" schedule
+        onView(withText(R.string.schedule_5_seconds))
+            .perform(click())
+
+        // Wait for 5 seconds
+        Thread.sleep(5000)
+
+        // Check if the notification appears
+        onView(withText("Reminder App."))
+            .check(matches(isDisplayed()))
     }
 
 
