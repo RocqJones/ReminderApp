@@ -68,6 +68,7 @@ dependencies {
 
     debugImplementation "androidx.compose.ui:ui-tooling:$compose_version"
     debugImplementation "androidx.compose.ui:ui-test-manifest:$compose_version"
+    implementation 'androidx.test.uiautomator:uiautomator:2.2.0'
 
     // work manager
     implementation("androidx.work:work-runtime-ktx:$work_version")
